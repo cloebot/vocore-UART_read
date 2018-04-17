@@ -4,7 +4,6 @@
 #include <fcntl.h>   /* File control definitions */
 #include <errno.h>   /* Error number definitions */
 #include <termios.h> /* POSIX terminal control definitions */
-// #include <iostream>
 
 void readFile(int fd) {
     char buffer[10];
@@ -14,16 +13,19 @@ void readFile(int fd) {
         char t = 0;
         bytes_read = read(fd, &t, 1);
         if (bytes_read < 0) {
-            fputs("read failed!\n", stderr);
-        }
-        buffer[k++] = t;
-        printf("%c", t);
-        if(t == '\n' && t == '\0') {
-            printf("%d", atoi(buffer));
-            int i;
-            for(i=0; i<10; i++)
-                buffer[i]='\0';
-            k = 0;
+            printf("    read failed!\n", stderr);
+        } else if (bytes_read = 0) {
+            printf("    No data!\n", stderr);
+        } else {
+            buffer[k++] = t;
+            printf("%c", t);
+            if(t == '\n' && t == '\0') {
+                printf("%d", atoi(buffer));
+                int i;
+                for(i=0; i<10; i++)
+                    buffer[i]='\0';
+                k = 0;
+            }
         }
     }
     while (bytes_read != 0);
@@ -39,14 +41,13 @@ int main (void)
         perror("open_port: Unable to open /dev/ttyS0 - ");
         }
         else
-        printf("open port...\n");
+        printf("succeed to open port...\n");
         fcntl(fd, F_SETFL, 0);
         //Set baudrate to 9600
         struct termios options;
         tcgetattr(fd, &options);
         cfsetispeed(&options, B9600);
         cfsetospeed(&options, B9600);
-        printf("baud rate = 9600\n");
     
         // Set the Charactor size
     
@@ -67,11 +68,9 @@ int main (void)
         else
             printf ( "%s\n", "tcsetattr succeed" );
     
-        printf("start read\n");
+        printf("-> start reading data\n");
         while(1) {
             readFile(fd);
-            int i;
-            for(i = 0; i < 100; i++) {}
         }
        
         // //Write text

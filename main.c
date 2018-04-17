@@ -5,7 +5,27 @@
 #include <errno.h>   /* Error number definitions */
 #include <termios.h> /* POSIX terminal control definitions */
 // #include <iostream>
- 
+
+void readFile(int fd) {
+    char buffer[10];
+    int bytes_read;
+    int k = 0;
+    do {
+        char t = 0;
+        bytes_read = read(fd, &t, 1);
+        buffer[k++] = t;
+        printf("%c", t);
+        if(t == '\n' && t == '\0') {
+            printf("%d", atoi(buffer));
+            int i;
+            for(i=0; i<10; i++)
+                buffer[i]='\0';
+            k = 0;
+        }
+    }
+    while (bytes_read != 0);
+}
+
 int main (void)
 {
         //open serial device
@@ -26,7 +46,8 @@ int main (void)
         tcsetattr(fd, TCSANOW, &options);
         while(1) {
             readFile(fd);
-            for (int t = 0; t < 100; t++) {}
+            int i;
+            for(i = 0; i < 100; i++) {}
         }
        
         // //Write text
@@ -46,23 +67,4 @@ int main (void)
         //close connection
         close(fd);
         return printf("End\n");
-}
-
-void readFile(int fd) {
-    char buffer[10];
-    int bytes_read;
-    int k = 0;
-    do {
-        char t = 0;
-        bytes_read = read(fd, &t, 1); 
-        buffer[k++] = t;    
-        printf("%c", t);
-        if(t == '\n' && t == '\0') {
-            printf("%d", atoi(buffer));
-            for(int i=0; i<10; i++) 
-                buffer[i]='\0';
-            k = 0;
-        }
-    }
-    while (bytes_read != 0); 
 }

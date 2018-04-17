@@ -13,6 +13,9 @@ void readFile(int fd) {
     do {
         char t = 0;
         bytes_read = read(fd, &t, 1);
+        if (bytes_read < 0) {
+            fputs("read failed!\n", stderr);
+        }
         buffer[k++] = t;
         printf("%c", t);
         if(t == '\n' && t == '\0') {
@@ -36,14 +39,35 @@ int main (void)
         perror("open_port: Unable to open /dev/ttyS0 - ");
         }
         else
+        printf("open port...\n");
         fcntl(fd, F_SETFL, 0);
-        //Set baudrate to 19200
+        //Set baudrate to 9600
         struct termios options;
         tcgetattr(fd, &options);
         cfsetispeed(&options, B9600);
         cfsetospeed(&options, B9600);
+        printf("baud rate = 9600\n");
+    
+        // Set the Charactor size
+    
+        options.c_cflag &= ~CSIZE; /* Mask the character size bits */
+        options.c_cflag |= CS8;    /* Select 8 data bits */
+    
+        // Set parity - No Parity (8N1)
+    
+        options.c_cflag &= ~PARENB;
+        options.c_cflag &= ~CSTOPB;
+        options.c_cflag &= ~CSIZE;
+        options.c_cflag |= CS8;
+    
         options.c_cflag |= (CLOCAL | CREAD);
-        tcsetattr(fd, TCSANOW, &options);
+    
+        if ( tcsetattr( fd, TCSANOW, &options ) == -1 )
+            printf ("Error with tcsetattr = %s\n", strerror ( errno ) );
+        else
+            printf ( "%s\n", "tcsetattr succeed" );
+    
+        printf("start read\n");
         while(1) {
             readFile(fd);
             int i;

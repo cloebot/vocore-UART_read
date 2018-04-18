@@ -84,7 +84,7 @@ int main (void)
             }
             else
             {
-                buffer[length] = '\0'
+                buffer[length] = '\0';
                 printf("%s", buffer);
             }
         }

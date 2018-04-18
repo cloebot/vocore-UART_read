@@ -17,7 +17,6 @@ void readFile(int fd) {
         } else if (bytes_read = 0) {
             printf("    No data!\n", stderr);
         } else {
-            printf("    succeed read!\n", stderr);
             buffer[k++] = t;
             printf("%c", t);
             if(t == '\n' && t == '\0') {
@@ -36,13 +35,13 @@ int main (void)
 {
         //open serial device
         int fd;
-        fd = open("/dev/ttyS1", O_RDWR | O_NOCTTY | O_NDELAY);
+        fd = open("/dev/ttyS0", O_RDWR | O_NOCTTY | O_NDELAY);
         if (fd == -1)
         {
-        perror("open_port: Unable to open /dev/ttyS1 - ");
+        perror("open_port: Unable to open /dev/ttyS0 - ");
         }
         else
-        printf("succeed to open port...\n");
+        printf("succeed to open ttyS0 port...\n");
         fcntl(fd, F_SETFL, 0);
         //Set baudrate to 9600
         struct termios options;
@@ -71,7 +70,23 @@ int main (void)
     
         printf("-> start reading data\n");
         while(1) {
-            readFile(fd);
+            char buffer[100];
+            ssize_t length = read(fd, &buffer, sizeof(buffer));
+            if (length == -1)
+            {
+                printf("Error reading from serial port\n");
+                break;
+            }
+            else if (length == 0)
+            {
+                printf("No more data\n");
+                break;
+            }
+            else
+            {
+                buffer[length] = '\0'
+                printf("%s", buffer);
+            }
         }
        
         // //Write text

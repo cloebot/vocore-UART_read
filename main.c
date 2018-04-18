@@ -17,6 +17,7 @@ void readFile(int fd) {
         } else if (bytes_read = 0) {
             printf("    No data!\n", stderr);
         } else {
+            printf("    succeed read!\n", stderr);
             buffer[k++] = t;
             printf("%c", t);
             if(t == '\n' && t == '\0') {
@@ -35,10 +36,10 @@ int main (void)
 {
         //open serial device
         int fd;
-        fd = open("/dev/ttyS0", O_RDWR | O_NOCTTY | O_NDELAY);
+        fd = open("/dev/ttyS1", O_RDWR | O_NOCTTY | O_NDELAY);
         if (fd == -1)
         {
-        perror("open_port: Unable to open /dev/ttyS0 - ");
+        perror("open_port: Unable to open /dev/ttyS1 - ");
         }
         else
         printf("succeed to open port...\n");

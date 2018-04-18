@@ -7,8 +7,8 @@ all: main
 
 # build it
 main:
-        $(CC) -g main.c $(LIBS) -o vocoreUARTRead
+	$(CC) -g main.c $(LIBS) -o vocoreUARTRead
 
 # clean it
 clean:
-        rm vocoreUARTRead
+	rm vocoreUARTRead

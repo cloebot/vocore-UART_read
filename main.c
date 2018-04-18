@@ -69,9 +69,9 @@ int main (void)
             printf ( "%s\n", "tcsetattr succeed" );
     
         printf("-> start reading data\n");
-        while(1) {
-            char buffer[100];
-            ssize_t length = read(fd, &buffer, sizeof(buffer));
+        do {
+            unsigned char buffer[100];
+            ssize_t length = read(fd, buffer, sizeof(buffer) - 1);
             if (length == -1)
             {
                 printf("Error reading from serial port\n");
@@ -85,9 +85,9 @@ int main (void)
             else
             {
                 buffer[length] = '\0';
-                printf("%s", buffer);
+                printf("%s\n", buffer);
             }
-        }
+        } while (1);
        
         // //Write text
         // int n;

@@ -61,19 +61,19 @@ int main (void)
   options.c_cflag |= CS8;
 
   //Turn off hardware based flow control (RTS/CTS).
-  SerialPortSettings.c_cflag &= ~CRTSCTS;
+  options.c_cflag &= ~CRTSCTS;
 
   // Turn on the receiver of the serial port (CREAD)
   options.c_cflag |= CREAD | CLOCAL;
 
   // Turn off software based flow control (XON/XOFF).
-  SerialPortSettings.c_iflag &= ~(IXON | IXOFF | IXANY);
+  options.c_iflag &= ~(IXON | IXOFF | IXANY);
 
   // Serial communications with outside devices
   // NON Cannonical mode is recommended.
-  SerialPortSettings.c_iflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+  options.c_iflag &= ~(ICANON | ECHO | ECHOE | ISIG);
 
-  SerialPortSettings.c_oflag &= ~OPOST;/*No Output Processing*/
+  options.c_oflag &= ~OPOST;/*No Output Processing*/
 
   /* Setting Time outs */
   options.c_cc[VMIN]  = 10; /* Read 10 characters */

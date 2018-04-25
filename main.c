@@ -34,15 +34,15 @@ void readFile(int fd) {
 int main (void)
 {
   printf("\n +----------------------------------+");
-  printf("\n |        Serial Port Write         |");
+  printf("\n |        Serial Port read          |");
   printf("\n +----------------------------------+");
 
-  //open serial device
+  // open serial device
   int fd;
   fd = open("/dev/ttyS0", O_RDWR | O_NOCTTY | O_NDELAY);
   if (fd == -1)
   {
-  perror("\nopen_port: Unable to open /dev/ttyS0 - ");
+  perror("\nopen_port: Unable to open /dev/ttyS0 ");
   }
   else
   printf("\nsucceed to open ttyS0 port...");
@@ -66,12 +66,9 @@ int main (void)
   // Turn on the receiver of the serial port (CREAD)
   options.c_cflag |= CREAD | CLOCAL;
 
-  // // Turn off software based flow control (XON/XOFF).
-  // options.c_iflag &= ~(IXON | IXOFF | IXANY);
-  //
   // // Serial communications with outside devices
   // // NON Cannonical mode is recommended.
-  // options.c_iflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+
   options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
                        | INLCR | IGNCR | ICRNL | IXON);
   options.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
@@ -88,7 +85,7 @@ int main (void)
       printf ( "%s\n", "tcsetattr succeed" );
       printf("\n  BaudRate = 9600 \n  StopBits = 1 \n  Parity   = none");
 
-  printf("\n-> start reading data");
+  printf("\n\n-> start reading data\n");
   do {
       unsigned char buffer[32];
       ssize_t length = read(fd, &buffer, sizeof(buffer) - 1);
